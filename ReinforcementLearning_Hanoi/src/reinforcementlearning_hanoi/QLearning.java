@@ -29,16 +29,21 @@ public class QLearning {
         R.set(x, y, val);
     }
     public String print() {
-        return R.print();
+        String res = "R-Matrix\n";
+        res += R.print();
+        res += "\nQ-Matrix\n";
+        res += Q.print();
+        return res;
     }
-    public void learnStep() {
+    public void episode() {
         int currState = chooseNextState(states);        
         while ( currState != lastState ) {
             int[] nextPossStates = getActions(R,currState);       
             int nextState = chooseNextState(nextPossStates.length);
             int[] possActions = getActions(Q,nextState);
             int maxQ = getMaximumActions(possActions);
-    //        double newVal = R.get()
+            double newVal = R.get(nextState,currState) + lambda * maxQ;
+            Q.set(nextState,currState, (int)newVal);
             currState = nextState;
         }        
     }

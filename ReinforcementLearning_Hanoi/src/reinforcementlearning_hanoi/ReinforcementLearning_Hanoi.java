@@ -16,6 +16,9 @@ public class ReinforcementLearning_Hanoi {
     public void print() {
         System.out.print(ql.print());
     }
+    public void learn() {
+        ql.episode();
+    }
     /**
      * set the transitions, possible movements in this game.
      */
@@ -54,7 +57,12 @@ public class ReinforcementLearning_Hanoi {
     public static void main(String[] args) {
         ReinforcementLearning_Hanoi hanoiGame = 
                 new ReinforcementLearning_Hanoi();
-        hanoiGame.print();
+        
+        for ( int i = 0; i < 100; i++ ) {
+            hanoiGame.print();
+            hanoiGame.learn();
+        }
+        
     }
     
 }
