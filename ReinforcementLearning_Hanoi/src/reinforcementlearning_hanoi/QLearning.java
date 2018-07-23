@@ -39,9 +39,10 @@ public class QLearning {
         int currState = chooseNextState(states);        
         while ( currState != lastState ) {
             int[] nextPossStates = getActions(R,currState);       
-            int nextState = chooseNextState(nextPossStates.length);
-            int[] possActions = getActions(Q,nextState);
-            int maxQ = getMaximumActions(possActions);
+            int nextStatePos = chooseNextState(nextPossStates.length);
+            int nextState = nextPossStates[nextStatePos];
+            int[] possActions = getActions(R,nextState);
+            int maxQ = getMaximumActions(possActions,nextState);
             double newVal = R.get(nextState,currState) + lambda * maxQ;
             Q.set(nextState,currState, (int)newVal);
             currState = nextState;
@@ -64,11 +65,13 @@ public class QLearning {
             return liste;
         }
     }
-    private int getMaximumActions(int[] actions) {
+    private int getMaximumActions(int[] actions, int state) {
         int maxVal = 0;
         for ( int i = 0; i < actions.length; i++ ) {
-            if ( actions[i] > maxVal ) {
-                maxVal = actions[i];
+            int action = actions[i];
+            int weight = Q.get(action, state);
+            if ( weight > maxVal ) {
+                maxVal = weight;
             }
         }
         return maxVal;
