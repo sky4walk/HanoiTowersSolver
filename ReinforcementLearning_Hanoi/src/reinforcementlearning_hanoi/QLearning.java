@@ -13,7 +13,6 @@ import java.util.ArrayList;
 public class QLearning {
     private double lambda;
     private int states;   
-    private int lastState;
     private my2DMatrix Q;
     private my2DMatrix R;
     public QLearning(int states, double lambda) {
@@ -23,10 +22,12 @@ public class QLearning {
       Q.init(0);
       R.init(-1);
       this.lambda = lambda;
-      lastState = states - 1;
     }
     public void setTransition(int x, int y, int val) {
         R.set(x, y, val);
+    }
+    public void setLambda(double lambda) {
+      this.lambda = lambda;        
     }
     public String print() {
         String res = "R-Matrix\n";
@@ -35,23 +36,32 @@ public class QLearning {
         res += Q.print();
         return res;
     }
-    public void episode() {
+    public String episode(int endState) {
+        String res = "";
+        if ( endState >= states ) {
+            endState = states - 1;
+        }
         int currState = chooseNextState(states);        
-        while ( currState != lastState ) {
-            int[] nextPossStates = getActions(R,currState);       
+        while ( currState != endState ) {
+            res += "CS:" + currState;
+            int[] nextPossStates = getActions(R,currState);
             int nextStatePos = chooseNextState(nextPossStates.length);
             int nextState = nextPossStates[nextStatePos];
+            res += " NS:" + nextState;
             int[] possActions = getActions(R,nextState);
             int maxQ = getMaximumActions(possActions,nextState);
+            res += " max:" + maxQ +"\n";
             double newVal = R.get(nextState,currState) + lambda * maxQ;
             Q.set(nextState,currState, (int)newVal);
             currState = nextState;
-        }        
+        }
+        return res;
     }
     private int[] getActions(my2DMatrix m, int state) {
         ArrayList<Integer> actions = new ArrayList<Integer>();
         for ( int x = 0; x < m.getSizeX(); x++ ) {
-            if ( m.get(x,state) >= 0 ) {
+            int transition = m.get(x,state);
+            if ( transition >= 0 ) {
                 actions.add(x);
             }
         }
@@ -78,5 +88,8 @@ public class QLearning {
     }
     private int chooseNextState(int states) {
         return (int)(Math.random() * states);
+    }
+    public int[] traceRoute(int startState, int endState) {
+        return null;
     }
 }

@@ -1,5 +1,6 @@
 /*
  * AndreBetz.de
+ *  Towers of Hanoi with three 
  */
 
 package reinforcementlearning_hanoi;
@@ -9,15 +10,33 @@ package reinforcementlearning_hanoi;
  * @author  AndreBetz.de
  */
 public class ReinforcementLearning_Hanoi {
-    QLearning ql = new QLearning(27,0.5);
+    static int statesHanoi = 27;
+    static int startState  = 0;
+    static int endState    = 26;
+    QLearning ql = new QLearning(statesHanoi,0.5);
+    String[] moveArray = new String[statesHanoi];
     public ReinforcementLearning_Hanoi() {
-        setRMatrix();        
+        setRMatrix();
+        setMovesVisible();
+    }
+    public void setLambda(double lambda) {
+        ql.setLambda(lambda);
     }
     public void print() {
         System.out.print(ql.print());
     }
-    public void learn() {
-        ql.episode();
+    public String learn() {
+        return ql.episode(endState);        
+    }
+    public String bestMoves() {
+        String res = "";
+        int[] moves = ql.traceRoute(startState,endState);
+        for ( int i = 0; i < moves.length; i++ ) {
+            int pos = moves[i];
+            res += printState(pos);
+            res += "-----------------\n";
+        }
+        return res;
     }
     /**
      * set the transitions, possible movements in this game.
@@ -52,17 +71,147 @@ public class ReinforcementLearning_Hanoi {
         ql.setTransition(26,26,100);                
     }
     /**
+     * all possible moves in thre slices Hanoi Tower.
+     */
+    private void setMovesVisible() {
+        moveArray[0]   = "  +     |     |  \n"; 
+        moveArray[0]  += " -+-    |     |  \n";   
+        moveArray[0]  += "--+--   |     |  \n";
+        
+        moveArray[1]   = "  |     |     |  \n";
+        moveArray[1]  += " -+-    |     |  \n";
+        moveArray[1]  += "--+--   |     +  \n";
+        
+        moveArray[2]   = "  |     |     |  \n";
+        moveArray[2]  += " -+-    |     |  \n";
+        moveArray[2]  += "--+--   +     |  \n";
+        
+        moveArray[3]   = "  |     |     |  \n";
+        moveArray[3]  += "  |     |     |  \n";
+        moveArray[3]  += "--+--   +    -+- \n";
+        
+        moveArray[4]   = "  |     |     |  \n";
+        moveArray[4]  += "  |     |     +  \n";
+        moveArray[4]  += "--+--   |    -+- \n";
+        
+        moveArray[5]   = "  |     |     |  \n";
+        moveArray[5]  += "  |     |     |  \n";
+        moveArray[5]  += "--+--  -+-    +  \n";
+        
+        moveArray[6]   = "  |     |     |  \n";
+        moveArray[6]  += "  +     |     |  \n";
+        moveArray[6]  += "--+--  -+-    |  \n";
+        
+        moveArray[7]   = "  |     |     |  \n";
+        moveArray[7]  += "  +     |     |  \n";
+        moveArray[7]  += "--+--   |    -+- \n";
+        
+        moveArray[8]   = "  |     |     |  \n";
+        moveArray[8]  += "  |     |     +  \n";
+        moveArray[8]  += "  |   --+--  -+- \n";
+        
+        moveArray[9]   = "  |     |     |  \n";
+        moveArray[9]  += "  |     +     |  \n";
+        moveArray[9]  += "--+--  -+-    |  \n";
+        
+        moveArray[10]  = "  |     |     |  \n";
+        moveArray[10] += "  |     |     |  \n";
+        moveArray[10] += "  +   --+--  -+- \n";
+        
+        moveArray[11]  = "  |     |     |  \n";
+        moveArray[11] += "  |     +     |  \n";
+        moveArray[11] += "  |   --+--  -+- \n";
+        
+        moveArray[12] += "  |     |     |  \n";
+        moveArray[12] += "  |     +     |  \n";
+        moveArray[12] += "  |    -+-  --+--\n";
+        
+        moveArray[13]  = "  |     +     |  \n";
+        moveArray[13] += "  |    -+-    |  \n";
+        moveArray[13] += "  |   --+--   |  \n";
+        
+        moveArray[14]  = "  |     |     |  \n";
+        moveArray[14] += "  |    -+-    |  \n";
+        moveArray[14] += "  +   --+--   |  \n";
+        
+        moveArray[15]  = "  |     |     |  \n";
+        moveArray[15] += "  |     +     |  \n";
+        moveArray[15] += " -+-  --+--   |  \n";
+        
+        moveArray[16]  = "  |     |     |  \n";
+        moveArray[16] += "  |     |     +  \n";
+        moveArray[16] += "  |    -+-  --+--\n";
+        
+        moveArray[17]  = "  |     |     |  \n";
+        moveArray[17] += "  |    -+-    |  \n";
+        moveArray[17] += "  |   --+--   +  \n";
+        
+        moveArray[18]  = "  |     |     |  \n";
+        moveArray[18] += "  |     |     |  \n";
+        moveArray[18] += "  +    -+-  --+--\n";
+
+        moveArray[19]  = "  |     |     |  \n";
+        moveArray[19] += "  |     |     +  \n";
+        moveArray[19] += " -+-    |   --+--\n";
+        
+        moveArray[20]  = "  |     |     |  \n";
+        moveArray[20] += "  |     |     |  \n";
+        moveArray[20] += " -+-  --+--   +  \n";
+        
+        moveArray[21]  = "  |     |     |  \n";
+        moveArray[21] += "  +     |     |  \n";
+        moveArray[21] += " -+-  --+--   |  \n";
+        
+        moveArray[22]  = "  |     |     |  \n";
+        moveArray[22] += "  |     |     |  \n";
+        moveArray[22] += " -+-    +   --+--\n";
+        
+        moveArray[23]  = "  |     |     |  \n";
+        moveArray[23] += "  +     |     |  \n";
+        moveArray[23] += " -+-    |   --+--\n";
+
+        moveArray[24]  = "  |     |     |  \n";
+        moveArray[24] += "  |     |    -+- \n";
+        moveArray[24] += "  +     |   --+--\n";
+
+        moveArray[25]  = "  |     |     |  \n";
+        moveArray[25] += "  |     |    -+- \n";
+        moveArray[25] += "  |     +   --+--\n";
+
+        moveArray[26]  = "  |     |     +  \n";
+        moveArray[26] += "  |     |    -+- \n";
+        moveArray[26] += "  |     |   --+--\n";
+    }
+    public String printState(int nr) {
+        String res = "";
+        if ( nr < statesHanoi && nr >= 0) {
+            res = moveArray[nr];
+        }
+        return res;
+    }
+    /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         ReinforcementLearning_Hanoi hanoiGame = 
                 new ReinforcementLearning_Hanoi();
-        
-        for ( int i = 0; i < 100; i++ ) {
-            hanoiGame.print();
-            hanoiGame.learn();
+
+        int rounds = 1000;
+        if ( args.length == 1 ) {
+            rounds =  Integer.valueOf(args[0]);
         }
-        
+        if ( args.length == 2 ) {
+            double lambda =  Double.parseDouble(args[1]);
+            hanoiGame.setLambda(lambda);
+        }
+        for ( int i = 0; i < rounds; i++ ) {
+            String res = hanoiGame.learn();
+            System.out.print(".");
+//            System.out.print(res);
+        }
+        hanoiGame.print();
+        System.out.print(hanoiGame.bestMoves());
+                        
     }
     
 }
