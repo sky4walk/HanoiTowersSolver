@@ -33,6 +33,7 @@ public class ReinforcementLearning_Hanoi {
         int[] moves = ql.traceRoute(startState,endState);
         for ( int i = 0; i < moves.length; i++ ) {
             int pos = moves[i];
+            res += Integer.toString(pos)+")\n";
             res += printState(pos);
             res += "-----------------\n";
         }
@@ -122,7 +123,7 @@ public class ReinforcementLearning_Hanoi {
         moveArray[11] += "  |     +     |  \n";
         moveArray[11] += "  |   --+--  -+- \n";
         
-        moveArray[12] += "  |     |     |  \n";
+        moveArray[12]  = "  |     |     |  \n";
         moveArray[12] += "  |     +     |  \n";
         moveArray[12] += "  |    -+-  --+--\n";
         

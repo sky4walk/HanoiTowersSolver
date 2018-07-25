@@ -65,15 +65,7 @@ public class QLearning {
                 actions.add(x);
             }
         }
-        if ( actions.size() == 0 ) {
-            return null;
-        } else {
-            int[] liste = new int[actions.size()];
-            for ( int i = 0; i < actions.size(); i++ ) {
-                liste[i] = actions.get(i);
-            }
-            return liste;
-        }
+        return ArrayList2Int(actions);
     }
     private int getMaximumActions(int[] actions, int state) {
         int maxVal = 0;
@@ -86,10 +78,46 @@ public class QLearning {
         }
         return maxVal;
     }
+    private int getBestNextState(int[] actions, int state) {
+        int maxVal = 0;
+        int bestState = 0;
+        for ( int i = 0; i < actions.length; i++ ) {
+            int action = actions[i];
+            int weight = Q.get(action, state);
+            if ( weight > maxVal ) {
+                maxVal = weight;
+                bestState = action;
+            }
+        }
+        return bestState;
+    }
+    private int[] ArrayList2Int(ArrayList<Integer> actions) {
+        if ( actions.size() == 0 ) {
+            return null;
+        } else {
+            int[] liste = new int[actions.size()];
+            for ( int i = 0; i < actions.size(); i++ ) {
+                liste[i] = actions.get(i);
+            }
+            return liste;
+        }
+    }
     private int chooseNextState(int states) {
         return (int)(Math.random() * states);
     }
     public int[] traceRoute(int startState, int endState) {
-        return null;
+        int currState = startState;
+        int countActions = 0;
+        ArrayList<Integer> actions = new ArrayList<Integer>();
+        actions.add(currState);
+        while ( currState != endState || 
+                countActions >  this.states ) {            
+            int[] nextStates = getActions(R,currState);
+            int bestState = getBestNextState(nextStates,currState);
+            actions.add(bestState);
+            currState = bestState;
+            countActions++;
+        }
+        return ArrayList2Int(actions);
     }
 }
